@@ -2,8 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package model.usuario;
-import model.academico.Institucion;
+package modelo.usuario;
+import modelo.academico.Institucion;
 import java.util.List;
 
 /**
