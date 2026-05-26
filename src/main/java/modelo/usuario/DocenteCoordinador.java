@@ -1,5 +1,5 @@
-package model.usuarios;
-import model.academico.Curso;
+package modelo.usuario;
+import modelo.academico.Curso;
 import java.util.List;
 
 public class DocenteCoordinador extends Docente {
