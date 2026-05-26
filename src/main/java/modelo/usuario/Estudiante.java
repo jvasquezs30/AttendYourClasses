@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package model.usuarios;
-import model.control.Asistencia;
-import model.control.Justificacion;
+package modelo.usuarios;
+import modelo.control.Asistencia;
+import modelo.control.Justificacion;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,8 +1,8 @@
-package model.usuarios;
-import model.academico.Clase;
-import model.control.Asistencia;
-import model.control.Justificacion;
-import model.control.Reporte;
+package modelo.usuarios;
+import modelo.academico.Clase;
+import modelo.control.Asistencia;
+import modelo.control.Justificacion;
+import modelo.control.Reporte;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,8 +37,7 @@ public class Docente extends Usuario {
         }
     }
 
-    public void registrarAsistencia(Clase clase, Estudiante estudiante,
-                                    String estado, String hora) {
+    public void registrarAsistencia(Clase clase, Estudiante estudiante, String estado, String hora) {
         if (!clasesAsignadas.contains(clase)) {
             return;
         }
@@ -49,8 +48,7 @@ public class Docente extends Usuario {
         clase.agregarAsistencia(a);
         estudiante.agregarAsistencia(a);
     }
-    public void registrarAsistencia(Clase clase, Estudiante estudiante,
-                                    String estado, String hora, String observacion) {
+    public void registrarAsistencia(Clase clase, Estudiante estudiante, String estado, String hora, String observacion) {
         if (!clasesAsignadas.contains(clase)) {
             return;
         }
