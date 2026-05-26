@@ -4,8 +4,8 @@
  */
 package modelo.academico;//
 
-import modelo.usuarios.Docente;
-import modelo.usuarios.Estudiante;
+import modelo.usuario.Docente;
+import modelo.usuario.Estudiante;
 import java.util.ArrayList;
 import java.util.List;
 
