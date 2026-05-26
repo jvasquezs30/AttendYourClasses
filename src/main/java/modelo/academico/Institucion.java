@@ -1,5 +1,5 @@
 package modelo.academico;
-import modelo.usuarios.Usuario;
+import modelo.usuario.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 
