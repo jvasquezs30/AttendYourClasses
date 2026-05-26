@@ -5,7 +5,7 @@ import modelo.academico.Clase;
 import modelo.academico.Curso;
 import modelo.control.RegistroLlegada;
 import modelo.control.ReportePdf;
-import modelo.usuarios.Docente;
+import modelo.usuario.Docente;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
