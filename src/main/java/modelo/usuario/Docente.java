@@ -1,4 +1,4 @@
-package modelo.usuarios;
+package modelo.usuario;
 import modelo.academico.Clase;
 import modelo.control.Asistencia;
 import modelo.control.Justificacion;
