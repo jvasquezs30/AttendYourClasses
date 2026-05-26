@@ -11,6 +11,6 @@ package com.mycompany.attendyourclasses;
 public class AttendYourClasses {
 
     public static void main(String[] args) {
-        System.out.println("Prueba!");
+        System.out.println("Pruebajjj!");
     }
 }
