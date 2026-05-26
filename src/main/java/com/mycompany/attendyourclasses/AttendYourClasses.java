@@ -1,6 +1,6 @@
 
 
-package main;
+package com.mycompany.attendyourclasses;
 import modelo.academico.Clase;
 import modelo.academico.Curso;
 import modelo.academico.Institucion;
