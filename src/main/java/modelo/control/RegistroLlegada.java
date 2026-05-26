@@ -4,7 +4,7 @@
  */
 package modelo.control;
 import modelo.academico.Clase;
-import modelo.usuarios.Estudiante;
+import modelo.usuario.Estudiante;
 
 import java.util.Date;
 /**

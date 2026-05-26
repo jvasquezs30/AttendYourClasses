@@ -1,7 +1,7 @@
-package model.control;
-import model.academico.Clase;
-import model.academico.Curso;
-import model.usuarios.Docente;
+package modelo.control;
+import modelo.academico.Clase;
+import modelo.academico.Curso;
+import modelo.usuario.Docente;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
