@@ -96,4 +96,16 @@ public class RegistroLlegada extends Asistencia {
     public String getDecisionDocente() {
         return decisionDocente;
     }
+    public String generarJson() {
+
+    return "{\n" +
+            "  \"codigo\": \"" + estudiante.getCodigoEstudiante() + "\",\n" +
+            "  \"nombre\": \"" + estudiante.getNombre() + "\",\n" +
+            "  \"apellido\": \"" + estudiante.getApellido() + "\",\n" +
+            "  \"presente\": true,\n" +
+            "  \"perteneceClase\": " + perteneceClase + ",\n" +
+            "  \"autorizado\": " + autorizadoPermanecer + ",\n" +
+            "  \"excusa\": \"" + obtenerExcusaVisible() + "\"\n" +
+            "}";
+}
 }

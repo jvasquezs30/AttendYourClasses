@@ -101,7 +101,16 @@ public class PantallaClase extends JFrame {
     }
 
     private JScrollPane crearTabla() {
-        String[] columnas = {"Código", "Estudiante", "Llegada", "Estado", "Retraso", "Excusa", "¿Pertenece?", "Autorización", "Criterio docente"};
+       String[] columnas = {
+    "Código",
+    "Estudiante",
+    "Asistencia",
+    "Estado",
+    "Excusa",
+    "¿Pertenece?",
+    "Autorización",
+    "Criterio docente"
+};
         modelo = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -119,7 +128,7 @@ public class PantallaClase extends JFrame {
         tabla.getColumnModel().getColumn(0).setPreferredWidth(110);
         tabla.getColumnModel().getColumn(1).setPreferredWidth(145);
         tabla.getColumnModel().getColumn(5).setPreferredWidth(245);
-        tabla.getColumnModel().getColumn(8).setPreferredWidth(340);
+        tabla.getColumnModel().getColumn(7).setPreferredWidth(340);
         tabla.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -215,23 +224,34 @@ public class PantallaClase extends JFrame {
         hilo.start();
     }
 
-    private void agregarRegistro(RegistroLlegada registro) {
-        visibles.add(registro);
-        modelo.addRow(new Object[]{
-                registro.getEstudiante().getCodigoEstudiante(),
-                registro.getEstudiante().getNombre() + " " + registro.getEstudiante().getApellido(),
-                registro.getHoraIngreso(),
-                registro.getEstado(),
-                registro.getMinutosRetraso() > 0 ? registro.getMinutosRetraso() + " min" : "A tiempo",
-                registro.obtenerExcusaVisible(),
-                registro.obtenerPertenenciaVisible(),
-                registro.obtenerAutorizacionVisible(),
-                registro.getDecisionDocente()
-        });
-        estadoClase.setText("Último ingreso: " + registro.getEstudiante().getNombre() + " " + registro.getEstudiante().getApellido()
-                + " · " + registro.getHoraIngreso() + " · " + registro.getEstado());
-        actualizarResumen();
-    }
+private void agregarRegistro(RegistroLlegada registro) {
+
+    visibles.add(registro);
+
+    String asistencia = "SI";
+
+    modelo.addRow(new Object[]{
+            registro.getEstudiante().getCodigoEstudiante(),
+            registro.getEstudiante().getNombre() + " " + registro.getEstudiante().getApellido(),
+            asistencia,
+            registro.getEstado(),
+            registro.obtenerExcusaVisible(),
+            registro.obtenerPertenenciaVisible(),
+            registro.obtenerAutorizacionVisible(),
+            registro.getDecisionDocente()
+    });
+
+    estadoClase.setText(
+            "Último registro: "
+                    + registro.getEstudiante().getNombre()
+                    + " "
+                    + registro.getEstudiante().getApellido()
+                    + " · "
+                    + registro.getEstado()
+    );
+
+    actualizarResumen();
+}
 
     private void actualizarResumen() {
         int puntuales = 0;
