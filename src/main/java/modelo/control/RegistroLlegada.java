@@ -53,18 +53,18 @@ public class RegistroLlegada extends Asistencia {
         return clase.esTardanza(horaIngreso) ? "Tardanza" : "Presente";
     }
 
-    public void marcarPasoLista(Clase clase, String horaManual) {
+    public synchronized void marcarPasoLista(Clase clase, String horaManual) {
         this.pasoLista = true;
         setHoraIngreso(horaManual);
         this.minutosRetraso = clase.minutosDespuesInicio(horaManual);
         setEstado(definirEstado(clase, horaManual, perteneceClase, autorizadoPermanecer));
     }
 
-    public void quitarPasoLista() {
+    public synchronized void quitarPasoLista() {
         this.pasoLista = false;
     }
 
-    public void registrarExcusaManual(String excusa) {
+    public synchronized void registrarExcusaManual(String excusa) {
         String texto = excusa == null ? "" : excusa.trim();
         actualizarObservacion(texto);
 
@@ -90,29 +90,29 @@ public class RegistroLlegada extends Asistencia {
         }
     }
 
-    public boolean tieneTardanza() {
+    public synchronized boolean tieneTardanza() {
         return "Tardanza".equalsIgnoreCase(getEstado());
     }
 
-    public String obtenerEstadoManual() {
+    public synchronized String obtenerEstadoManual() {
         if (!pasoLista) {
             return "No registrado";
         }
         return getEstado();
     }
 
-    public String obtenerExcusaVisible() {
+    public synchronized String obtenerExcusaVisible() {
         if (justificacion == null) {
             return tieneTardanza() ? "Sin excusa registrada" : "No aplica";
         }
         return justificacion.getMotivo();
     }
 
-    public String obtenerPertenenciaVisible() {
+    public synchronized String obtenerPertenenciaVisible() {
         return perteneceClase ? "Sí" : "No";
     }
 
-    public String obtenerAutorizacionVisible() {
+    public synchronized String obtenerAutorizacionVisible() {
         if (perteneceClase) {
             return "No requiere";
         }
@@ -127,31 +127,31 @@ public class RegistroLlegada extends Asistencia {
         return justificacion;
     }
 
-    public int getMinutosRetraso() {
+    public synchronized int getMinutosRetraso() {
         return minutosRetraso;
     }
 
-    public boolean isPerteneceClase() {
+    public synchronized boolean isPerteneceClase() {
         return perteneceClase;
     }
 
-    public boolean isAutorizadoPermanecer() {
+    public synchronized boolean isAutorizadoPermanecer() {
         return autorizadoPermanecer;
     }
 
-    public String getDecisionDocente() {
+    public synchronized String getDecisionDocente() {
         return decisionDocente;
     }
 
-    public boolean isPasoLista() {
+    public synchronized boolean isPasoLista() {
         return pasoLista;
     }
 
-    public void setPasoLista(boolean pasoLista) {
+    public synchronized void setPasoLista(boolean pasoLista) {
         this.pasoLista = pasoLista;
     }
 
-    public String generarJson() {
+    public synchronized String generarJson() {
         Estudiante e = getEstudiante();
         return "{\n" +
                 "  \"estudiante\": {\n" +

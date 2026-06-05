@@ -22,7 +22,11 @@ public class ReporteJson {
         }
 
         File archivoJson = new File(carpetaReportes, "asistencia_manual_" + System.currentTimeMillis() + ".json");
-        String contenido = construirJson(curso, clase, docente, registros);
+        String contenido;
+
+        synchronized (registros) {
+            contenido = construirJson(curso, clase, docente, registros);
+        }
 
         try {
             Files.writeString(archivoJson.toPath(), contenido, StandardCharsets.UTF_8);

@@ -2,9 +2,11 @@ package view;
 
 import modelo.academico.Clase;
 import modelo.academico.Curso;
+import modelo.control.GeneradorJsonRunnable;
 import modelo.control.RegistroLlegada;
 import modelo.control.ReporteJson;
 import modelo.control.ReportePdf;
+import modelo.control.RelojClaseThread;
 import modelo.usuario.Docente;
 
 import javax.swing.BorderFactory;
@@ -17,7 +19,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -25,6 +26,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -46,7 +49,7 @@ public class PantallaClase extends JFrame {
     private JLabel tardanzasValor;
     private JLabel externosValor;
     private LocalTime horaPrograma;
-    private Timer relojTimer;
+    private RelojClaseThread relojThread;
     private boolean actualizandoTabla;
     private static final DateTimeFormatter FORMATO_HORA = DateTimeFormatter.ofPattern("HH:mm");
 
@@ -72,6 +75,17 @@ public class PantallaClase extends JFrame {
         setSize(1300, 720);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                detenerRelojDinamico();
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                detenerRelojDinamico();
+            }
+        });
     }
 
     private void construirContenido() {
@@ -104,7 +118,7 @@ public class PantallaClase extends JFrame {
         relojValor.setFont(new Font("Segoe UI", Font.BOLD, 18));
         relojValor.setForeground(new Color(180, 240, 255));
 
-        estadoClase = new JLabel("Marque Pasar lista y escriba la excusa en la tabla.", SwingConstants.CENTER);
+        estadoClase = new JLabel(" Marque en el recuadro de pasar lista y escriba la excusa (Si aplica).", SwingConstants.CENTER);
         estadoClase.setFont(new Font("Segoe UI", Font.BOLD, 15));
         estadoClase.setForeground(Color.CYAN);
 
@@ -168,30 +182,32 @@ public class PantallaClase extends JFrame {
                 return;
             }
 
-            RegistroLlegada registro = registros.get(fila);
             actualizandoTabla = true;
             try {
-                if (columna == 2) {
-                    boolean pasoLista = Boolean.TRUE.equals(modelo.getValueAt(fila, 2));
-                    if (pasoLista) {
-                        registro.marcarPasoLista(clase, horaPrograma.format(FORMATO_HORA));
-                    } else {
-                        registro.quitarPasoLista();
+                synchronized (registros) {
+                    RegistroLlegada registro = registros.get(fila);
+                    if (columna == 2) {
+                        boolean pasoLista = Boolean.TRUE.equals(modelo.getValueAt(fila, 2));
+                        if (pasoLista) {
+                            registro.marcarPasoLista(clase, horaPrograma.format(FORMATO_HORA));
+                        } else {
+                            registro.quitarPasoLista();
+                        }
+                        refrescarFila(fila, registro);
+                        estadoClase.setText("Registro manual actualizado: "
+                                + registro.getEstudiante().getNombre() + " "
+                                + registro.getEstudiante().getApellido() + " · "
+                                + registro.obtenerEstadoManual());
+                    } else if (columna == 4) {
+                        String excusa = String.valueOf(modelo.getValueAt(fila, 4));
+                        registro.registrarExcusaManual(excusa);
+                        refrescarFila(fila, registro);
+                        estadoClase.setText("Excusa registrada para: "
+                                + registro.getEstudiante().getNombre() + " "
+                                + registro.getEstudiante().getApellido());
                     }
-                    refrescarFila(fila, registro);
-                    estadoClase.setText("Registro manual actualizado: "
-                            + registro.getEstudiante().getNombre() + " "
-                            + registro.getEstudiante().getApellido() + " · "
-                            + registro.obtenerEstadoManual());
-                    actualizarResumen();
-                } else if (columna == 4) {
-                    String excusa = String.valueOf(modelo.getValueAt(fila, 4));
-                    registro.registrarExcusaManual(excusa);
-                    refrescarFila(fila, registro);
-                    estadoClase.setText("Excusa registrada para: "
-                            + registro.getEstudiante().getNombre() + " "
-                            + registro.getEstudiante().getApellido());
                 }
+                actualizarResumen();
             } finally {
                 actualizandoTabla = false;
             }
@@ -222,18 +238,20 @@ public class PantallaClase extends JFrame {
     }
 
     private void cargarRegistrosPendientes() {
-        for (RegistroLlegada registro : registros) {
-            registro.quitarPasoLista();
-            modelo.addRow(new Object[]{
-                    registro.getEstudiante().getCodigoEstudiante(),
-                    registro.getEstudiante().getNombre() + " " + registro.getEstudiante().getApellido(),
-                    Boolean.FALSE,
-                    registro.obtenerEstadoManual(),
-                    registro.obtenerExcusaVisible(),
-                    registro.obtenerPertenenciaVisible(),
-                    registro.obtenerAutorizacionVisible(),
-                    registro.getDecisionDocente()
-            });
+        synchronized (registros) {
+            for (RegistroLlegada registro : registros) {
+                registro.quitarPasoLista();
+                modelo.addRow(new Object[]{
+                        registro.getEstudiante().getCodigoEstudiante(),
+                        registro.getEstudiante().getNombre() + " " + registro.getEstudiante().getApellido(),
+                        Boolean.FALSE,
+                        registro.obtenerEstadoManual(),
+                        registro.obtenerExcusaVisible(),
+                        registro.obtenerPertenenciaVisible(),
+                        registro.obtenerAutorizacionVisible(),
+                        registro.getDecisionDocente()
+                });
+            }
         }
         actualizarResumen();
     }
@@ -276,10 +294,7 @@ public class PantallaClase extends JFrame {
         boton.setForeground(Color.WHITE);
         boton.setFocusPainted(false);
         boton.setBorder(BorderFactory.createEmptyBorder(12, 20, 12, 20));
-        boton.addActionListener(e -> {
-            String resultado = ReporteJson.generar(curso, clase, docente, registros);
-            JOptionPane.showMessageDialog(this, resultado);
-        });
+        boton.addActionListener(e -> generarJsonEnHilo(boton));
         return boton;
     }
 
@@ -330,11 +345,33 @@ public class PantallaClase extends JFrame {
     }
 
     private void iniciarRelojDinamico() {
-        relojTimer = new Timer(5000, e -> {
+        relojThread = new RelojClaseThread(() -> {
             horaPrograma = horaPrograma.plusMinutes(1);
             relojValor.setText(textoReloj());
         });
-        relojTimer.start();
+        relojThread.start();
+    }
+
+    private void detenerRelojDinamico() {
+        if (relojThread != null) {
+            relojThread.detenerReloj();
+        }
+    }
+
+    private void generarJsonEnHilo(JButton boton) {
+        boton.setEnabled(false);
+        estadoClase.setText("Generando JSON en un hilo independiente...");
+
+        GeneradorJsonRunnable tarea = new GeneradorJsonRunnable(curso, clase, docente, registros, resultado ->
+                SwingUtilities.invokeLater(() -> {
+                    boton.setEnabled(true);
+                    estadoClase.setText("JSON generado con Runnable y Thread. La interfaz siguió disponible.");
+                    JOptionPane.showMessageDialog(this, resultado);
+                })
+        );
+
+        Thread hiloJson = new Thread(tarea, "Hilo-Generador-JSON");
+        hiloJson.start();
     }
 
     private LocalTime obtenerHoraInicial() {
@@ -356,21 +393,23 @@ public class PantallaClase extends JFrame {
         int tardanzas = 0;
         int externos = 0;
 
-        visibles.clear();
-        for (RegistroLlegada r : registros) {
-            if (!r.isPasoLista()) {
-                continue;
-            }
-            visibles.add(r);
-            marcados++;
-            if ("Presente".equalsIgnoreCase(r.getEstado())) {
-                puntuales++;
-            }
-            if (r.tieneTardanza()) {
-                tardanzas++;
-            }
-            if (!r.isPerteneceClase()) {
-                externos++;
+        synchronized (registros) {
+            visibles.clear();
+            for (RegistroLlegada r : registros) {
+                if (!r.isPasoLista()) {
+                    continue;
+                }
+                visibles.add(r);
+                marcados++;
+                if ("Presente".equalsIgnoreCase(r.getEstado())) {
+                    puntuales++;
+                }
+                if (r.tieneTardanza()) {
+                    tardanzas++;
+                }
+                if (!r.isPerteneceClase()) {
+                    externos++;
+                }
             }
         }
 

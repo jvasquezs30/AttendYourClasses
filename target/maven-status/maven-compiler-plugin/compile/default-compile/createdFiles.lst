@@ -1,10 +1,13 @@
+view\PantallaClase$3.class
 com\mycompany\attendyourclasses\AttendYourClasses.class
 modelo\control\Justificacion.class
 view\PantallaClase.class
 modelo\control\Reporte.class
 modelo\academico\Curso.class
 modelo\usuario\Usuario.class
+modelo\control\RelojClaseThread.class
 modelo\control\ReportePdf.class
+modelo\control\GeneradorJsonRunnable$ResultadoGeneracion.class
 modelo\academico\Institucion.class
 modelo\usuario\Administrador.class
 modelo\academico\Clase.class
@@ -16,3 +19,4 @@ modelo\usuario\DocenteCoordinador.class
 view\PantallaClase$1.class
 view\PantallaClase$2.class
 modelo\control\Asistencia.class
+modelo\control\GeneradorJsonRunnable.class

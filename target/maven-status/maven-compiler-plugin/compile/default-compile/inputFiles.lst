@@ -3,8 +3,10 @@ C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\academico\Clase.ja
 C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\academico\Curso.java
 C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\academico\Institucion.java
 C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\control\Asistencia.java
+C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\control\GeneradorJsonRunnable.java
 C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\control\Justificacion.java
 C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\control\RegistroLlegada.java
+C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\control\RelojClaseThread.java
 C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\control\Reporte.java
 C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\control\ReporteJson.java
 C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\control\ReportePdf.java
