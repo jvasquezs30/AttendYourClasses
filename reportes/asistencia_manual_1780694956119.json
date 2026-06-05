@@ -1,0 +1,261 @@
+{
+  "curso": "Programación Orientada a Objetos",
+  "tema": "Control de asistencia en tiempo real",
+  "docente": "Taidy Marrugo",
+  "aula": "Sala A-3",
+  "fechaGeneracion": "05/06/2026 16:29",
+  "registros": [
+    {
+      "estudiante": {
+        "idUsuario": 1,
+        "nombre": "Josue",
+        "apellido": "Vasquez",
+        "identificacion": "1123456789",
+        "correo": "jvasquez@est.edu.co",
+        "codigoEstudiante": "POO-2026-001",
+        "programa": "Ingeniería de Sistemas",
+        "semestre": 4,
+        "estadoAcademico": "Activo"
+      },
+      "asistencia": {
+        "pasoLista": true,
+        "estado": "Tardanza",
+        "perteneceClase": true,
+        "autorizado": true,
+        "excusa": "Sin excusa registrada",
+        "decisionDocente": "Estudiante matriculado en el curso"
+      }
+    },
+    {
+      "estudiante": {
+        "idUsuario": 2,
+        "nombre": "Oscar",
+        "apellido": "Tapia",
+        "identificacion": "1123456780",
+        "correo": "otapia@est.edu.co",
+        "codigoEstudiante": "POO-2026-002",
+        "programa": "Ingeniería de Sistemas",
+        "semestre": 4,
+        "estadoAcademico": "Activo"
+      },
+      "asistencia": {
+        "pasoLista": true,
+        "estado": "Tardanza",
+        "perteneceClase": true,
+        "autorizado": true,
+        "excusa": "Sin excusa registrada",
+        "decisionDocente": "Estudiante matriculado en el curso"
+      }
+    },
+    {
+      "estudiante": {
+        "idUsuario": 3,
+        "nombre": "Juan",
+        "apellido": "Pacheco",
+        "identificacion": "1123456781",
+        "correo": "jpacheco@est.edu.co",
+        "codigoEstudiante": "POO-2026-003",
+        "programa": "Ingeniería de Sistemas",
+        "semestre": 4,
+        "estadoAcademico": "Activo"
+      },
+      "asistencia": {
+        "pasoLista": false,
+        "estado": "No registrado",
+        "perteneceClase": true,
+        "autorizado": true,
+        "excusa": "No aplica",
+        "decisionDocente": "Estudiante matriculado en el curso"
+      }
+    },
+    {
+      "estudiante": {
+        "idUsuario": 4,
+        "nombre": "Laura",
+        "apellido": "Mejía",
+        "identificacion": "1123456782",
+        "correo": "lmejia@est.edu.co",
+        "codigoEstudiante": "POO-2026-004",
+        "programa": "Ingeniería de Sistemas",
+        "semestre": 4,
+        "estadoAcademico": "Activo"
+      },
+      "asistencia": {
+        "pasoLista": false,
+        "estado": "No registrado",
+        "perteneceClase": true,
+        "autorizado": true,
+        "excusa": "Tráfico por cierre de vía principal",
+        "decisionDocente": "Estudiante matriculado en el curso"
+      }
+    },
+    {
+      "estudiante": {
+        "idUsuario": 5,
+        "nombre": "Camila",
+        "apellido": "Torres",
+        "identificacion": "1123456783",
+        "correo": "ctorres@est.edu.co",
+        "codigoEstudiante": "POO-2026-005",
+        "programa": "Ingeniería de Sistemas",
+        "semestre": 4,
+        "estadoAcademico": "Activo"
+      },
+      "asistencia": {
+        "pasoLista": false,
+        "estado": "No registrado",
+        "perteneceClase": true,
+        "autorizado": true,
+        "excusa": "El bus demoró más de lo habitual",
+        "decisionDocente": "Estudiante matriculado en el curso"
+      }
+    },
+    {
+      "estudiante": {
+        "idUsuario": 6,
+        "nombre": "Andrés",
+        "apellido": "Ramos",
+        "identificacion": "1123456784",
+        "correo": "aramos@est.edu.co",
+        "codigoEstudiante": "POO-2026-006",
+        "programa": "Ingeniería de Sistemas",
+        "semestre": 4,
+        "estadoAcademico": "Activo"
+      },
+      "asistencia": {
+        "pasoLista": false,
+        "estado": "No registrado",
+        "perteneceClase": true,
+        "autorizado": true,
+        "excusa": "Cita médica previa con constancia",
+        "decisionDocente": "Estudiante matriculado en el curso"
+      }
+    },
+    {
+      "estudiante": {
+        "idUsuario": 7,
+        "nombre": "Valentina",
+        "apellido": "Gómez",
+        "identificacion": "1123456785",
+        "correo": "vgomez@est.edu.co",
+        "codigoEstudiante": "POO-2026-007",
+        "programa": "Ingeniería de Sistemas",
+        "semestre": 4,
+        "estadoAcademico": "Activo"
+      },
+      "asistencia": {
+        "pasoLista": false,
+        "estado": "No registrado",
+        "perteneceClase": true,
+        "autorizado": true,
+        "excusa": "Falla de energía en casa antes de salir",
+        "decisionDocente": "Estudiante matriculado en el curso"
+      }
+    },
+    {
+      "estudiante": {
+        "idUsuario": 8,
+        "nombre": "Mateo",
+        "apellido": "Herrera",
+        "identificacion": "1123456786",
+        "correo": "mherrera@est.edu.co",
+        "codigoEstudiante": "POO-2026-008",
+        "programa": "Ingeniería de Sistemas",
+        "semestre": 4,
+        "estadoAcademico": "Activo"
+      },
+      "asistencia": {
+        "pasoLista": false,
+        "estado": "No registrado",
+        "perteneceClase": true,
+        "autorizado": true,
+        "excusa": "Problema familiar de último momento",
+        "decisionDocente": "Estudiante matriculado en el curso"
+      }
+    },
+    {
+      "estudiante": {
+        "idUsuario": 9,
+        "nombre": "Daniela",
+        "apellido": "Ruiz",
+        "identificacion": "1123456787",
+        "correo": "druiz@est.edu.co",
+        "codigoEstudiante": "POO-2026-009",
+        "programa": "Ingeniería de Sistemas",
+        "semestre": 4,
+        "estadoAcademico": "Activo"
+      },
+      "asistencia": {
+        "pasoLista": false,
+        "estado": "No registrado",
+        "perteneceClase": true,
+        "autorizado": true,
+        "excusa": "Retraso por lluvia y congestión vehicular",
+        "decisionDocente": "Estudiante matriculado en el curso"
+      }
+    },
+    {
+      "estudiante": {
+        "idUsuario": 10,
+        "nombre": "Santiago",
+        "apellido": "Moreno",
+        "identificacion": "1123456788",
+        "correo": "smoreno@est.edu.co",
+        "codigoEstudiante": "POO-2026-010",
+        "programa": "Ingeniería de Sistemas",
+        "semestre": 4,
+        "estadoAcademico": "Activo"
+      },
+      "asistencia": {
+        "pasoLista": false,
+        "estado": "No registrado",
+        "perteneceClase": true,
+        "autorizado": true,
+        "excusa": "Confusión con el cambio de aula",
+        "decisionDocente": "Estudiante matriculado en el curso"
+      }
+    },
+    {
+      "estudiante": {
+        "idUsuario": 11,
+        "nombre": "Mariana",
+        "apellido": "Castillo",
+        "identificacion": "1123456790",
+        "correo": "mcastillo@est.edu.co",
+        "codigoEstudiante": "BD-2026-021",
+        "programa": "Ingeniería de Sistemas",
+        "semestre": 5,
+        "estadoAcademico": "Activo"
+      },
+      "asistencia": {
+        "pasoLista": false,
+        "estado": "No registrado",
+        "perteneceClase": false,
+        "autorizado": true,
+        "excusa": "No aplica",
+        "decisionDocente": "Puede quedarse como oyente porque solicitó permiso antes de iniciar la clase"
+      }
+    },
+    {
+      "estudiante": {
+        "idUsuario": 12,
+        "nombre": "Felipe",
+        "apellido": "Navarro",
+        "identificacion": "1123456791",
+        "correo": "fnavarro@est.edu.co",
+        "codigoEstudiante": "RED-2026-014",
+        "programa": "Ingeniería de Sistemas",
+        "semestre": 6,
+        "estadoAcademico": "Activo"
+      },
+      "asistencia": {
+        "pasoLista": false,
+        "estado": "No registrado",
+        "perteneceClase": false,
+        "autorizado": false,
+        "excusa": "No aplica",
+        "decisionDocente": "No puede quedarse porque no pertenece al grupo y no presentó autorización académica"
+      }
+    }
+  ]
+}

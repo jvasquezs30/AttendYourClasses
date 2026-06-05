@@ -9,6 +9,7 @@ modelo\academico\Institucion.class
 modelo\usuario\Administrador.class
 modelo\academico\Clase.class
 modelo\control\RegistroLlegada.class
+modelo\control\ReporteJson.class
 modelo\usuario\Docente.class
 modelo\usuario\Estudiante.class
 modelo\usuario\DocenteCoordinador.class

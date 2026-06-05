@@ -3,10 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package modelo.control;
+
 import modelo.academico.Clase;
 import modelo.usuario.Estudiante;
 
 import java.util.Date;
+
 /**
  *
  * @author Oscar
@@ -19,6 +21,7 @@ public class RegistroLlegada extends Asistencia {
     private boolean perteneceClase;
     private boolean autorizadoPermanecer;
     private String decisionDocente;
+    private boolean pasoLista;
 
     public RegistroLlegada(int idAsistencia, Clase clase, Estudiante estudiante, String horaIngreso) {
         this(idAsistencia, clase, estudiante, horaIngreso, "", true, true, "Estudiante matriculado en el curso");
@@ -36,9 +39,8 @@ public class RegistroLlegada extends Asistencia {
         this.perteneceClase = perteneceClase;
         this.autorizadoPermanecer = autorizadoPermanecer;
         this.decisionDocente = decisionDocente;
-        if (clase.esTardanza(horaIngreso) && excusa != null && !excusa.trim().isEmpty()) {
-            this.justificacion = new Justificacion(idAsistencia, excusa, new Date(), "Pendiente", "Registrada al momento de llegada", "");
-        }
+        this.pasoLista = false;
+        registrarExcusaManual(excusa);
     }
 
     private static String definirEstado(Clase clase, String horaIngreso, boolean perteneceClase, boolean autorizadoPermanecer) {
@@ -51,8 +53,52 @@ public class RegistroLlegada extends Asistencia {
         return clase.esTardanza(horaIngreso) ? "Tardanza" : "Presente";
     }
 
+    public void marcarPasoLista(Clase clase, String horaManual) {
+        this.pasoLista = true;
+        setHoraIngreso(horaManual);
+        this.minutosRetraso = clase.minutosDespuesInicio(horaManual);
+        setEstado(definirEstado(clase, horaManual, perteneceClase, autorizadoPermanecer));
+    }
+
+    public void quitarPasoLista() {
+        this.pasoLista = false;
+    }
+
+    public void registrarExcusaManual(String excusa) {
+        String texto = excusa == null ? "" : excusa.trim();
+        actualizarObservacion(texto);
+
+        if (texto.isEmpty()) {
+            this.justificacion = null;
+            return;
+        }
+
+        if (this.justificacion == null) {
+            this.justificacion = new Justificacion(
+                    getIdAsistencia(),
+                    texto,
+                    new Date(),
+                    "Pendiente",
+                    "Registrada manualmente por el docente",
+                    ""
+            );
+        } else {
+            this.justificacion.setMotivo(texto);
+            this.justificacion.setFechaEnvio(new Date());
+            this.justificacion.setEstado("Pendiente");
+            this.justificacion.setComentario("Actualizada manualmente por el docente");
+        }
+    }
+
     public boolean tieneTardanza() {
         return "Tardanza".equalsIgnoreCase(getEstado());
+    }
+
+    public String obtenerEstadoManual() {
+        if (!pasoLista) {
+            return "No registrado";
+        }
+        return getEstado();
     }
 
     public String obtenerExcusaVisible() {
@@ -96,16 +142,47 @@ public class RegistroLlegada extends Asistencia {
     public String getDecisionDocente() {
         return decisionDocente;
     }
-    public String generarJson() {
 
-    return "{\n" +
-            "  \"codigo\": \"" + estudiante.getCodigoEstudiante() + "\",\n" +
-            "  \"nombre\": \"" + estudiante.getNombre() + "\",\n" +
-            "  \"apellido\": \"" + estudiante.getApellido() + "\",\n" +
-            "  \"presente\": true,\n" +
-            "  \"perteneceClase\": " + perteneceClase + ",\n" +
-            "  \"autorizado\": " + autorizadoPermanecer + ",\n" +
-            "  \"excusa\": \"" + obtenerExcusaVisible() + "\"\n" +
-            "}";
-}
+    public boolean isPasoLista() {
+        return pasoLista;
+    }
+
+    public void setPasoLista(boolean pasoLista) {
+        this.pasoLista = pasoLista;
+    }
+
+    public String generarJson() {
+        Estudiante e = getEstudiante();
+        return "{\n" +
+                "  \"estudiante\": {\n" +
+                "    \"idUsuario\": " + e.getIdUsuario() + ",\n" +
+                "    \"nombre\": \"" + escaparJson(e.getNombre()) + "\",\n" +
+                "    \"apellido\": \"" + escaparJson(e.getApellido()) + "\",\n" +
+                "    \"identificacion\": \"" + escaparJson(e.getIdentificacion()) + "\",\n" +
+                "    \"correo\": \"" + escaparJson(e.getCorreo()) + "\",\n" +
+                "    \"codigoEstudiante\": \"" + escaparJson(e.getCodigoEstudiante()) + "\",\n" +
+                "    \"programa\": \"" + escaparJson(e.getPrograma()) + "\",\n" +
+                "    \"semestre\": " + e.getSemestre() + ",\n" +
+                "    \"estadoAcademico\": \"" + escaparJson(e.getEstadoAcademico()) + "\"\n" +
+                "  },\n" +
+                "  \"asistencia\": {\n" +
+                "    \"pasoLista\": " + pasoLista + ",\n" +
+                "    \"estado\": \"" + escaparJson(obtenerEstadoManual()) + "\",\n" +
+                "    \"perteneceClase\": " + perteneceClase + ",\n" +
+                "    \"autorizado\": " + autorizadoPermanecer + ",\n" +
+                "    \"excusa\": \"" + escaparJson(obtenerExcusaVisible()) + "\",\n" +
+                "    \"decisionDocente\": \"" + escaparJson(decisionDocente) + "\"\n" +
+                "  }\n" +
+                "}";
+    }
+
+    private String escaparJson(String texto) {
+        if (texto == null) {
+            return "";
+        }
+        return texto.replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\n", " ")
+                .replace("\r", " ");
+    }
 }

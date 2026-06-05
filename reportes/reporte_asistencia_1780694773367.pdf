@@ -1,0 +1,82 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 842 595] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 1979 >>
+stream
+BT
+/F1 10 Tf
+50 780 Td
+14 TL
+(REPORTE DE ASISTENCIA) Tj
+T*
+(Materia: Programación Orientada a Objetos) Tj
+T*
+(Tema: Control de asistencia en tiempo real) Tj
+T*
+(Docente: Taidy Marrugo) Tj
+T*
+(Hora de inicio: 18:00) Tj
+T*
+(Aula: Sala A-3) Tj
+T*
+(Tolerancia: 10 minutos) Tj
+T*
+(Fecha de generación: 05/06/2026 16:26) Tj
+T*
+( ) Tj
+T*
+(Código | Estudiante | Llegada | Estado | Retraso | Excusa | Pertenece | Autorización | Criterio docente) Tj
+T*
+( ) Tj
+T*
+(POO-2026-001 | Josue Vasquez | 18:02 | Presente | 2 min | No aplica | Sí | No requiere | Estudiante matriculado en ...) Tj
+T*
+(POO-2026-002 | Oscar Tapia | 18:03 | Presente | 3 min | No aplica | Sí | No requiere | Estudiante matriculado en el...) Tj
+T*
+(POO-2026-003 | Juan Pacheco | 18:04 | Presente | 4 min | No aplica | Sí | No requiere | Estudiante matriculado en e...) Tj
+T*
+(POO-2026-004 | Laura Mejía | 18:05 | Presente | 5 min | Le fue mal | Sí | No requiere | Estudiante matriculado en e...) Tj
+T*
+(POO-2026-005 | Camila Torres | 18:08 | Presente | 8 min | El bus demoró más de lo habitual | Sí | No requiere | Est...) Tj
+T*
+(POO-2026-006 | Andrés Ramos | 18:10 | Presente | 10 min | Cita médica previa con constancia | Sí | No requiere | Es...) Tj
+T*
+(POO-2026-007 | Valentina Gómez | 18:11 | Tardanza | 11 min | Falla de energía en casa antes de salir | Sí | No requ...) Tj
+T*
+(POO-2026-008 | Mateo Herrera | 18:11 | Tardanza | 11 min | Problema familiar de último momento | Sí | No requiere |...) Tj
+T*
+(POO-2026-009 | Daniela Ruiz | 18:12 | Tardanza | 12 min | Retraso por lluvia y congestión vehicular | Sí | No requi...) Tj
+T*
+(POO-2026-010 | Santiago Moreno | 18:12 | Tardanza | 12 min | Confusión con el cambio de aula | Sí | No requiere | E...) Tj
+T*
+(BD-2026-021 | Mariana Castillo | 18:13 | Invitado autorizado | 13 min | No aplica | No | Puede quedarse | Puede que...) Tj
+T*
+(RED-2026-014 | Felipe Navarro | 18:13 | No autorizado | 13 min | No aplica | No | Debe retirarse | No puede quedars...) Tj
+T*
+ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000311 00000 n 
+trailer
+<< /Root 1 0 R /Size 6 >>
+startxref
+2342
+%%EOF

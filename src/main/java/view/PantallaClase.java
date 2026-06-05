@@ -1,11 +1,12 @@
-
-
 package view;
+
 import modelo.academico.Clase;
 import modelo.academico.Curso;
 import modelo.control.RegistroLlegada;
+import modelo.control.ReporteJson;
 import modelo.control.ReportePdf;
 import modelo.usuario.Docente;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -23,6 +25,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,10 +40,15 @@ public class PantallaClase extends JFrame {
     private List<RegistroLlegada> visibles;
     private DefaultTableModel modelo;
     private JLabel estadoClase;
+    private JLabel relojValor;
     private JLabel totalValor;
     private JLabel puntualesValor;
     private JLabel tardanzasValor;
     private JLabel externosValor;
+    private LocalTime horaPrograma;
+    private Timer relojTimer;
+    private boolean actualizandoTabla;
+    private static final DateTimeFormatter FORMATO_HORA = DateTimeFormatter.ofPattern("HH:mm");
 
     public PantallaClase(Curso curso, Clase clase, Docente docente, List<RegistroLlegada> registros) {
         this.curso = curso;
@@ -46,20 +56,20 @@ public class PantallaClase extends JFrame {
         this.docente = docente;
         this.registros = registros;
         this.visibles = new ArrayList<>();
+        this.horaPrograma = obtenerHoraInicial();
         configurarVentana();
         construirContenido();
+        cargarRegistrosPendientes();
+        iniciarRelojDinamico();
     }
 
     public void mostrar() {
-        SwingUtilities.invokeLater(() -> {
-            setVisible(true);
-            simularLlegadas();
-        });
+        SwingUtilities.invokeLater(() -> setVisible(true));
     }
 
     private void configurarVentana() {
         setTitle("Attend Your Classes");
-        setSize(1150, 680);
+        setSize(1300, 720);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
@@ -75,7 +85,7 @@ public class PantallaClase extends JFrame {
     }
 
     private JPanel crearEncabezado() {
-        JPanel panel = new JPanel(new GridLayout(3, 1, 4, 4));
+        JPanel panel = new JPanel(new GridLayout(4, 1, 4, 4));
         panel.setBackground(new Color(40, 40, 40));
         panel.setBorder(BorderFactory.createEmptyBorder(18, 20, 18, 20));
 
@@ -90,31 +100,45 @@ public class PantallaClase extends JFrame {
         detalle.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         detalle.setForeground(Color.LIGHT_GRAY);
 
-        estadoClase = new JLabel("Clase iniciada. Esperando ingreso de estudiantes...", SwingConstants.CENTER);
+        relojValor = new JLabel(textoReloj(), SwingConstants.CENTER);
+        relojValor.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        relojValor.setForeground(new Color(180, 240, 255));
+
+        estadoClase = new JLabel("Marque Pasar lista y escriba la excusa en la tabla.", SwingConstants.CENTER);
         estadoClase.setFont(new Font("Segoe UI", Font.BOLD, 15));
         estadoClase.setForeground(Color.CYAN);
 
         panel.add(titulo);
         panel.add(detalle);
+        panel.add(relojValor);
         panel.add(estadoClase);
         return panel;
     }
 
     private JScrollPane crearTabla() {
-       String[] columnas = {
-    "Código",
-    "Estudiante",
-    "Asistencia",
-    "Estado",
-    "Excusa",
-    "¿Pertenece?",
-    "Autorización",
-    "Criterio docente"
-};
+        String[] columnas = {
+                "Código",
+                "Estudiante",
+                "Pasar lista",
+                "Estado",
+                "Excusa",
+                "¿Pertenece?",
+                "Autorización",
+                "Criterio docente"
+        };
+
         modelo = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false;
+                return column == 2 || column == 4;
+            }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 2) {
+                    return Boolean.class;
+                }
+                return String.class;
             }
         };
 
@@ -126,16 +150,62 @@ public class PantallaClase extends JFrame {
         tabla.getTableHeader().setForeground(Color.WHITE);
         tabla.setAutoCreateRowSorter(true);
         tabla.getColumnModel().getColumn(0).setPreferredWidth(110);
-        tabla.getColumnModel().getColumn(1).setPreferredWidth(145);
-        tabla.getColumnModel().getColumn(5).setPreferredWidth(245);
-        tabla.getColumnModel().getColumn(7).setPreferredWidth(340);
+        tabla.getColumnModel().getColumn(1).setPreferredWidth(150);
+        tabla.getColumnModel().getColumn(2).setPreferredWidth(90);
+        tabla.getColumnModel().getColumn(4).setPreferredWidth(260);
+        tabla.getColumnModel().getColumn(5).setPreferredWidth(90);
+        tabla.getColumnModel().getColumn(7).setPreferredWidth(360);
+        tabla.setToolTipText("Doble clic en Excusa para escribir lo que dijo el estudiante.");
+
+        modelo.addTableModelListener(e -> {
+            if (actualizandoTabla || e.getFirstRow() < 0) {
+                return;
+            }
+
+            int fila = e.getFirstRow();
+            int columna = e.getColumn();
+            if (fila >= registros.size()) {
+                return;
+            }
+
+            RegistroLlegada registro = registros.get(fila);
+            actualizandoTabla = true;
+            try {
+                if (columna == 2) {
+                    boolean pasoLista = Boolean.TRUE.equals(modelo.getValueAt(fila, 2));
+                    if (pasoLista) {
+                        registro.marcarPasoLista(clase, horaPrograma.format(FORMATO_HORA));
+                    } else {
+                        registro.quitarPasoLista();
+                    }
+                    refrescarFila(fila, registro);
+                    estadoClase.setText("Registro manual actualizado: "
+                            + registro.getEstudiante().getNombre() + " "
+                            + registro.getEstudiante().getApellido() + " · "
+                            + registro.obtenerEstadoManual());
+                    actualizarResumen();
+                } else if (columna == 4) {
+                    String excusa = String.valueOf(modelo.getValueAt(fila, 4));
+                    registro.registrarExcusaManual(excusa);
+                    refrescarFila(fila, registro);
+                    estadoClase.setText("Excusa registrada para: "
+                            + registro.getEstudiante().getNombre() + " "
+                            + registro.getEstudiante().getApellido());
+                }
+            } finally {
+                actualizandoTabla = false;
+            }
+        });
+
         tabla.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 java.awt.Component componente = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 String estado = table.getModel().getValueAt(table.convertRowIndexToModel(row), 3).toString();
                 if (!isSelected) {
-                    if ("Tardanza".equalsIgnoreCase(estado)) {
+                    if ("No registrado".equalsIgnoreCase(estado)) {
+                        componente.setBackground(new Color(245, 245, 245));
+                    } else if ("Tardanza".equalsIgnoreCase(estado)) {
                         componente.setBackground(new Color(255, 247, 237));
                     } else if ("No autorizado".equalsIgnoreCase(estado)) {
                         componente.setBackground(new Color(254, 226, 226));
@@ -151,11 +221,28 @@ public class PantallaClase extends JFrame {
         return new JScrollPane(tabla);
     }
 
+    private void cargarRegistrosPendientes() {
+        for (RegistroLlegada registro : registros) {
+            registro.quitarPasoLista();
+            modelo.addRow(new Object[]{
+                    registro.getEstudiante().getCodigoEstudiante(),
+                    registro.getEstudiante().getNombre() + " " + registro.getEstudiante().getApellido(),
+                    Boolean.FALSE,
+                    registro.obtenerEstadoManual(),
+                    registro.obtenerExcusaVisible(),
+                    registro.obtenerPertenenciaVisible(),
+                    registro.obtenerAutorizacionVisible(),
+                    registro.getDecisionDocente()
+            });
+        }
+        actualizarResumen();
+    }
+
     private JPanel crearZonaInferior() {
         JPanel zona = new JPanel(new BorderLayout(12, 12));
         zona.setBackground(new Color(240, 240, 240));
         zona.add(crearResumen(), BorderLayout.CENTER);
-        zona.add(crearBotonPdf(), BorderLayout.EAST);
+        zona.add(crearBotones(), BorderLayout.EAST);
         return zona;
     }
 
@@ -166,12 +253,34 @@ public class PantallaClase extends JFrame {
         puntualesValor = crearValor();
         tardanzasValor = crearValor();
         externosValor = crearValor();
-        panel.add(crearTarjeta("Ingresos mostrados", totalValor));
+        panel.add(crearTarjeta("Marcados en lista", totalValor));
         panel.add(crearTarjeta("A tiempo", puntualesValor));
         panel.add(crearTarjeta("Tardanzas", tardanzasValor));
         panel.add(crearTarjeta("Externos", externosValor));
         actualizarResumen();
         return panel;
+    }
+
+    private JPanel crearBotones() {
+        JPanel panel = new JPanel(new GridLayout(2, 1, 8, 8));
+        panel.setBackground(new Color(240, 240, 240));
+        panel.add(crearBotonJson());
+        panel.add(crearBotonPdf());
+        return panel;
+    }
+
+    private JButton crearBotonJson() {
+        JButton boton = new JButton("Generar JSON");
+        boton.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        boton.setBackground(new Color(20, 120, 80));
+        boton.setForeground(Color.WHITE);
+        boton.setFocusPainted(false);
+        boton.setBorder(BorderFactory.createEmptyBorder(12, 20, 12, 20));
+        boton.addActionListener(e -> {
+            String resultado = ReporteJson.generar(curso, clase, docente, registros);
+            JOptionPane.showMessageDialog(this, resultado);
+        });
+        return boton;
     }
 
     private JButton crearBotonPdf() {
@@ -212,53 +321,48 @@ public class PantallaClase extends JFrame {
         return tarjeta;
     }
 
-    private void simularLlegadas() {
-        Thread hilo = new Thread(() -> {
-            pausar(900);
-            for (RegistroLlegada registro : registros) {
-                SwingUtilities.invokeLater(() -> agregarRegistro(registro));
-                pausar(900);
-            }
-            SwingUtilities.invokeLater(() -> estadoClase.setText("Registro finalizado. Ya puede extraer el PDF de asistencia."));
-        });
-        hilo.start();
+    private void refrescarFila(int fila, RegistroLlegada registro) {
+        modelo.setValueAt(registro.obtenerEstadoManual(), fila, 3);
+        modelo.setValueAt(registro.obtenerExcusaVisible(), fila, 4);
+        modelo.setValueAt(registro.obtenerPertenenciaVisible(), fila, 5);
+        modelo.setValueAt(registro.obtenerAutorizacionVisible(), fila, 6);
+        modelo.setValueAt(registro.getDecisionDocente(), fila, 7);
     }
 
-private void agregarRegistro(RegistroLlegada registro) {
+    private void iniciarRelojDinamico() {
+        relojTimer = new Timer(5000, e -> {
+            horaPrograma = horaPrograma.plusMinutes(1);
+            relojValor.setText(textoReloj());
+        });
+        relojTimer.start();
+    }
 
-    visibles.add(registro);
+    private LocalTime obtenerHoraInicial() {
+        try {
+            return LocalTime.parse(clase.getHoraInicio());
+        } catch (DateTimeParseException ex) {
+            return LocalTime.now().withSecond(0).withNano(0);
+        }
+    }
 
-    String asistencia = "SI";
-
-    modelo.addRow(new Object[]{
-            registro.getEstudiante().getCodigoEstudiante(),
-            registro.getEstudiante().getNombre() + " " + registro.getEstudiante().getApellido(),
-            asistencia,
-            registro.getEstado(),
-            registro.obtenerExcusaVisible(),
-            registro.obtenerPertenenciaVisible(),
-            registro.obtenerAutorizacionVisible(),
-            registro.getDecisionDocente()
-    });
-
-    estadoClase.setText(
-            "Último registro: "
-                    + registro.getEstudiante().getNombre()
-                    + " "
-                    + registro.getEstudiante().getApellido()
-                    + " · "
-                    + registro.getEstado()
-    );
-
-    actualizarResumen();
-}
+    private String textoReloj() {
+        return "Reloj de clase: " + horaPrograma.format(FORMATO_HORA)
+                ;
+    }
 
     private void actualizarResumen() {
+        int marcados = 0;
         int puntuales = 0;
         int tardanzas = 0;
         int externos = 0;
 
-        for (RegistroLlegada r : visibles) {
+        visibles.clear();
+        for (RegistroLlegada r : registros) {
+            if (!r.isPasoLista()) {
+                continue;
+            }
+            visibles.add(r);
+            marcados++;
             if ("Presente".equalsIgnoreCase(r.getEstado())) {
                 puntuales++;
             }
@@ -270,17 +374,9 @@ private void agregarRegistro(RegistroLlegada registro) {
             }
         }
 
-        totalValor.setText(String.valueOf(visibles.size()));
+        totalValor.setText(String.valueOf(marcados));
         puntualesValor.setText(String.valueOf(puntuales));
         tardanzasValor.setText(String.valueOf(tardanzas));
         externosValor.setText(String.valueOf(externos));
-    }
-
-    private void pausar(long milisegundos) {
-        try {
-            Thread.sleep(milisegundos);
-        } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
     }
 }
