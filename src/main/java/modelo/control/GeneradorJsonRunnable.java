@@ -6,7 +6,7 @@ import modelo.usuario.Docente;
 
 import java.util.List;
 
-public class GeneradorJsonRunnable implements Runnable {
+public class GeneradorJsonRunnable implements Runnable, Exportable {
 
     public interface ResultadoGeneracion {
         void alTerminar(String resultado);
@@ -26,6 +26,11 @@ public class GeneradorJsonRunnable implements Runnable {
         this.docente = docente;
         this.registros = registros;
         this.resultadoGeneracion = resultadoGeneracion;
+    }
+
+    @Override
+    public void exportar() {
+        run();
     }
 
     @Override

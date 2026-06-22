@@ -1,18 +1,18 @@
-C:\Users\josue\Desktop\AttendYourClasses\src\main\java\com\mycompany\attendyourclasses\AttendYourClasses.java
-C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\academico\Clase.java
-C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\academico\Curso.java
-C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\academico\Institucion.java
-C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\control\Asistencia.java
-C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\control\GeneradorJsonRunnable.java
-C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\control\Justificacion.java
-C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\control\RegistroLlegada.java
-C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\control\RelojClaseThread.java
-C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\control\Reporte.java
-C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\control\ReporteJson.java
-C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\control\ReportePdf.java
-C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\usuario\Administrador.java
-C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\usuario\Docente.java
-C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\usuario\DocenteCoordinador.java
-C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\usuario\Estudiante.java
-C:\Users\josue\Desktop\AttendYourClasses\src\main\java\modelo\usuario\Usuario.java
-C:\Users\josue\Desktop\AttendYourClasses\src\main\java\view\PantallaClase.java
+D:\4 SEMESTRE\ADMINISTRACION\AttendYourClasses\src\main\java\com\mycompany\attendyourclasses\AttendYourClasses.java
+D:\4 SEMESTRE\ADMINISTRACION\AttendYourClasses\src\main\java\modelo\academico\Clase.java
+D:\4 SEMESTRE\ADMINISTRACION\AttendYourClasses\src\main\java\modelo\academico\Curso.java
+D:\4 SEMESTRE\ADMINISTRACION\AttendYourClasses\src\main\java\modelo\academico\Institucion.java
+D:\4 SEMESTRE\ADMINISTRACION\AttendYourClasses\src\main\java\modelo\control\Asistencia.java
+D:\4 SEMESTRE\ADMINISTRACION\AttendYourClasses\src\main\java\modelo\control\GeneradorJsonRunnable.java
+D:\4 SEMESTRE\ADMINISTRACION\AttendYourClasses\src\main\java\modelo\control\Justificacion.java
+D:\4 SEMESTRE\ADMINISTRACION\AttendYourClasses\src\main\java\modelo\control\RegistroLlegada.java
+D:\4 SEMESTRE\ADMINISTRACION\AttendYourClasses\src\main\java\modelo\control\RelojClaseThread.java
+D:\4 SEMESTRE\ADMINISTRACION\AttendYourClasses\src\main\java\modelo\control\Reporte.java
+D:\4 SEMESTRE\ADMINISTRACION\AttendYourClasses\src\main\java\modelo\control\ReporteJson.java
+D:\4 SEMESTRE\ADMINISTRACION\AttendYourClasses\src\main\java\modelo\control\ReportePdf.java
+D:\4 SEMESTRE\ADMINISTRACION\AttendYourClasses\src\main\java\modelo\usuario\Administrador.java
+D:\4 SEMESTRE\ADMINISTRACION\AttendYourClasses\src\main\java\modelo\usuario\Docente.java
+D:\4 SEMESTRE\ADMINISTRACION\AttendYourClasses\src\main\java\modelo\usuario\DocenteCoordinador.java
+D:\4 SEMESTRE\ADMINISTRACION\AttendYourClasses\src\main\java\modelo\usuario\Estudiante.java
+D:\4 SEMESTRE\ADMINISTRACION\AttendYourClasses\src\main\java\modelo\usuario\Usuario.java
+D:\4 SEMESTRE\ADMINISTRACION\AttendYourClasses\src\main\java\view\PantallaClase.java

@@ -1,5 +1,4 @@
 package modelo.academico;
-
 import modelo.control.Asistencia;
 import java.util.ArrayList;
 import java.util.Date;
