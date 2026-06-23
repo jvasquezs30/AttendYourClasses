@@ -40,7 +40,12 @@ public class RegistroLlegada extends Asistencia {
         this.autorizadoPermanecer = autorizadoPermanecer;
         this.decisionDocente = decisionDocente;
         this.pasoLista = false;
-        registrarExcusaManual(excusa);
+
+        try {
+            registrarExcusaManual(excusa);
+        } catch (OperacionInvalidaException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     private static String definirEstado(Clase clase, String horaIngreso, boolean perteneceClase, boolean autorizadoPermanecer) {
@@ -64,7 +69,13 @@ public class RegistroLlegada extends Asistencia {
         this.pasoLista = false;
     }
 
-    public synchronized void registrarExcusaManual(String excusa) {
+    public synchronized void registrarExcusaManual(String excusa)
+            {
+
+        if(excusa != null && excusa.length() > 500){
+            throw new OperacionInvalidaException(
+                    "La excusa no puede superar los 500 caracteres");
+        }
         String texto = excusa == null ? "" : excusa.trim();
         actualizarObservacion(texto);
 
